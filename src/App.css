@@ -2,6 +2,7 @@
   text-align: center;
 }
 
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,4 +36,14 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.wrapper_current_word{
+  font-size: 40px;
+}
+.wrapper_current_word.not-finded{
+  opacity: 0.5;
+}
+.bg-grey{
+  background-color: #e6e6e698;
 }
