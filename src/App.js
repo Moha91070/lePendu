@@ -17,13 +17,13 @@ function App() {
   const [usedLetter, setUsedLetter] = useState([]);
   const [win, setWin] = useState(0);
   const [attempt, setAttempt] = useState(10);
+  const [score, setScore] = useState(0);
 
   const initGame = async () =>{
     const newWord = createNewWord();
     setData(newWord);
     setUsedLetter([]);
     setAttempt(10);
-
   }
 
   const createNewWord = async () =>{
@@ -64,6 +64,9 @@ function App() {
           }
           if(result === data.length-1 && attempt > 0){
             setWin(1);
+            setScore(score+1)
+            const sendData = postData()
+            console.log(sendData);
             window.alert('Félicitation vous avez gagner');
           }
         }
@@ -88,18 +91,31 @@ function App() {
     };
   }, [usedLetter, attempt])
 
-  
+  const user = localStorage.getItem('user');
+  console.log(user);
   const getData = async () => {
     const dataJson = await fetch("https://animalfinderapi.herokuapp.com/word")
     return await dataJson.json();
-  };  
+  }; 
+  const postData = async () => {
+    
+    const dataJson = await fetch("https://animalfinderapi.herokuapp.com/game", {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: 'mohamed2',
+      isWin: true,
+      username: 'mohamed1',
+      word: 'mohamed1'
+    })
+    })
+    return await dataJson.json();
+  }
+  
 
 if (!data){
   return <p>Awaiting....</p>
 }
-const user = localStorage.getItem('user')
-
-
 
     return (
         <div className={`bg ${darkMode ? "bg-dark" : "bg-light"}`}>
@@ -112,12 +128,12 @@ const user = localStorage.getItem('user')
           <p>Trouvez le mot pour gagner des points</p>
           <div className='App'><br/>
           <ToastContainer />
-            {(user === null) && <User />}  
+             {(!user) && <User /> }
             <a className='btn btn-primary' href=''>Relancer le jeu</a>  <br/>
             win = {win}
             <br/> 
             attempt = {attempt}     
-            {(data) && 
+            {(data && user) && 
               <CurrentWord currentWord = {data} usedLetter={usedLetter} win={win}/>
              }
              <br/>

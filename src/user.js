@@ -7,13 +7,16 @@ import Classement from './classement';
 export default function User() {
   
   const [myInputValue, setMyInputValue] = useState("");
+  
   const getUser = async () => {
     const dataJson = await fetch(`https://animalfinderapi.herokuapp.com/user/${myInputValue}`);
-    const user = await dataJson.json();
+    const user =  dataJson.json();
     
     if(user){
       localStorage.setItem('user', user);
       toast.success('Vous pouvez maintenant jouez en tant qu\'utilisateur: ' + myInputValue);
+    } else {
+      toast.error('L\'utilisateur: ' + myInputValue + ' existe déjà.');
     }
   };
 
